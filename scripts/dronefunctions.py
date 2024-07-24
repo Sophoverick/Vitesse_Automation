@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 '''
-Important Team Vitesse Automation Member do read this:
+Important, do read this:
 This function could see some errors if somethign is wrong with the connection,
-you guyz know the basic drill of GPS locking etc. prior to flight.
+the basic drill of GPS locking etc. prior to flight is known and implemented.
 However due to some problems some messages might not be able to reach
-the jetson nano via MAVLink, for that case i have made 2 copies of each movement
-function
-The r for relative in most functions refers relative to drone NOT to the ground.
-gotoalt is function which takes relative to ground while most others are
+the jetson nano via MAVLink, for that case I have made 2 copies of each movement
+function. The r for relative in most functions refers relative to
+drone NOT to the ground. Gotoalt is function which takes relative to ground while most others are
 relative to the drone for ease of use.
+Functions like relup2, relyaw2, relforward2 involve the absence of ACKs and instead use
+location functions and feedback to wait till the destination has been reached.
+First try using the first ones, if COMMAND_ACK and MISSION_ACK work then their is no need to look
+at the functions suffixed with 2
 '''
 
 from pymavlink import mavutil
