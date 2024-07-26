@@ -1,5 +1,5 @@
 # Simulation
-This file as whole contains the scripts of Team Vitesse's pymavlink code in a ros wrapper specialized for simulation, the implementation code is not open for release, the drone is automated to catch other drones.The saved_model.pt file is an unoptimized neural network trained by @Grimmer107 of YOLO v5n for detecting the drones in simulation environment.
+This file as whole contains the scripts of Team Vitesse's pymavlink code in a ros wrapper specialized for simulation, the implementation code is not open for release, the drone is automated to catch other drones.The saved_model.pt file is an unoptimized neural network trained by @grimmer107 of YOLO v5n for detecting the drones in simulation environment.
 
 ## With gazebo and ROS
 Run the gazebo simulation along with the two instances of ardupilot, the gazebo environment is necessary for simulation of camera afterwhich opencv_bridge and subscriber keep updated camera images with them. The updated images will be used by the Drone to move to waypoint.
