@@ -146,6 +146,7 @@ def relup2(connection, up, speed,tol):
     sleep(4)
     print("The current height has become (%.2f)"% (-msg.z))
     return msg
+
 #move forward in direction being faced with FRD
 def relforward(connection,dist,speed):
     #obtaining local coordinates
@@ -291,7 +292,12 @@ def setauto(connection):
 
 #go RTL
 def setrtl(connection):
-    connection.mav.command_long_send(connection.target_system,connection.target_component,
+    msg=connection.mav.command_long_send(connection.target_system,connection.target_component,
                                      mavutil.mavlink.MAV_CMD_DO_SET_MODE, 0, 1, 6, 0, 0, 0, 0, 0, 0)
-    msg = connection.recv_match(type='COMMAND_ACK', blocking=True)
-    print(msg)
+    return msg
+    
+def manualtl(connection,speed,angspeed):
+    msg=connection.mav.send(mavutil.mavlink.MAVLink_set_position_target_local_ned_message(10, connection.target_system,
+                        connection.target_component, mavutil.mavlink.MAV_FRAME_LOCAL_NED,
+                            int(0b100111111000),0,0,0,speed,speed,speed,0,0,0,0,angspeed))
+    return msg
