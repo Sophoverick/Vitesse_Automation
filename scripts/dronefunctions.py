@@ -277,6 +277,16 @@ def gotoalt2(connection, taralt, speed, tol):
     sleep(4)
     print("The current height has become (%.2f)"% (height))
     return msg
+#wait for guided, credit to https://discuss.ardupilot.org/t/check-what-mode-vehicle-is-in-using-pymavlink/62912/3
+def wait4guided(connection):
+    while True:
+    msg = master.recv_match(type = 'HEARTBEAT', blocking = False)
+    if msg:
+        mode = mavutil.mode_string_v10(msg)
+        if mode == 'GUIDED':
+           print("Drone is guided")
+           break
+    return msg
 
 #go GUIDED, see https://ardupilot.org/copter/docs/parameters.html#fltmode1
 def setguided(connection):
@@ -300,7 +310,7 @@ def setland(connection):
     msg=connection.mav.command_long_send(connection.target_system,connection.target_component,
                                      mavutil.mavlink.MAV_CMD_DO_SET_MODE, 0, 1, 9, 0, 0, 0, 0, 0, 0)
     return msg
-    
+
 #RTL is not allowed in teknofest as per 
 #https://cdn.teknofest.org/media/upload/userFormUpload/Published-7-UAV_COMPETITION_RULES_BOOKLET_2024_V1.15_ev9jf.pdf
 #This is our own implementation
