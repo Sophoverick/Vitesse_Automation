@@ -278,26 +278,37 @@ def gotoalt2(connection, taralt, speed, tol):
     print("The current height has become (%.2f)"% (height))
     return msg
 
-#go GUIDED
+#go GUIDED, see https://ardupilot.org/copter/docs/parameters.html#fltmode1
 def setguided(connection):
     msg=connection.mav.command_long_send(connection.target_system,connection.target_component,
                                     mavutil.mavlink.MAV_CMD_DO_SET_MODE, 0, 1, 4, 0, 0, 0, 0, 0, 0)
     return msg
 
-#go AUTO
+#go AUTO, see https://ardupilot.org/copter/docs/parameters.html#fltmode1
 def setauto(connection):
     msg=connection.mav.command_long_send(connection.target_system,connection.target_component,
                                     mavutil.mavlink.MAV_CMD_DO_SET_MODE, 0, 1, 3, 0, 0, 0, 0, 0, 0)
     return msg
 
-#go RTL
+#go RTL, see https://ardupilot.org/copter/docs/parameters.html#fltmode1
 def setrtl(connection):
     msg=connection.mav.command_long_send(connection.target_system,connection.target_component,
                                      mavutil.mavlink.MAV_CMD_DO_SET_MODE, 0, 1, 6, 0, 0, 0, 0, 0, 0)
     return msg
+#Land, see https://ardupilot.org/copter/docs/parameters.html#fltmode1
+def setland(connection):
+    msg=connection.mav.command_long_send(connection.target_system,connection.target_component,
+                                     mavutil.mavlink.MAV_CMD_DO_SET_MODE, 0, 1, 9, 0, 0, 0, 0, 0, 0)
+    return msg
     
+#RTL is not allowed in teknofest as per 
+#https://cdn.teknofest.org/media/upload/userFormUpload/Published-7-UAV_COMPETITION_RULES_BOOKLET_2024_V1.15_ev9jf.pdf
+#This is our own implementation
 def manualtl(connection,speed,angspeed):
+    height=raltitude(connection, height)
+    #insert 0 0 with same height in NED frame
     msg=connection.mav.send(mavutil.mavlink.MAVLink_set_position_target_local_ned_message(10, connection.target_system,
                         connection.target_component, mavutil.mavlink.MAV_FRAME_LOCAL_NED,
-                            int(0b100111111000),0,0,0,speed,speed,speed,0,0,0,0,angspeed))
+                            int(0b100111111000),0,0,-height,speed,speed,speed,0,0,0,0,angspeed))
+    msg=setland(connection)
     return msg
