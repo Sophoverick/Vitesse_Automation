@@ -25,12 +25,13 @@ def tcalculate(lalt,halt,lpitch,hpitch):
   else:
     x=tan(lpitch)/tan(hpitch)
     #calculation derivation available in pdf
-    if abs(x-1)<=0.05: #less then 3 degrees of difference leads to this 
+    if abs(x-1)>=0.05: #less then 3 degrees of difference leads to this 
       #altitude of target relative to ground (not drone):
       print("The ratio of tangents of pitches is %.2f"%x)
       target_alt=(x*halt-lalt)/(x-1)
       print("The target was %.2f above the highest height", target_alt-halt)
     else:
+      #to prevent a zero in the denominator of the above formulation 
       target_alt=(halt+lalt)/2
   #relative forward distance from drone to target
   forward=abs(target_alt-lalt)/abs(tan(lpitch))
